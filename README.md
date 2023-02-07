@@ -1,4 +1,4 @@
 # Battleship
-Swing Battleship in java
+Swing Battleship in Java
 
 https://en.wikipedia.org/wiki/Battleship_(game)
