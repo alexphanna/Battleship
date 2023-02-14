@@ -4,17 +4,15 @@ import java.awt.event.*;
 public class BigPanel extends JLayeredPane {
     private ShipLayer shipLayer;
     private ButtonLayer buttonLayer;
-    public BigPanel() {
+    public BigPanel(int[][] grid) {
         setBounds(0, 0, 500, 500);
 
         Grid gridLayer = new Grid();
         gridLayer.setBounds(0, 0, 500, 500);
         gridLayer.setBackground(Color.BLACK);
         add(gridLayer, 2);
-
-        add(new Radar(), 1);
         
-        shipLayer = new ShipLayer(Client.enemyTorpedoGrid);
+        shipLayer = new ShipLayer(grid);
         shipLayer.setBounds(0, 0, 500, 500);
         shipLayer.setLayout(null);
         shipLayer.setOpaque(false);
@@ -27,8 +25,6 @@ public class BigPanel extends JLayeredPane {
         buttonLayer.setVisible(false);
         for (int i = 0; i < 100; i++) {
             Square square = new Square();
-            square.setRow(i / 10);
-            square.setColumn(i % 10);
             buttonLayer.add(square);
         }
         add(buttonLayer, 0);
@@ -36,10 +32,12 @@ public class BigPanel extends JLayeredPane {
         addShips(Client.grid);
     }
     public class ShipLayer extends JPanel {
-        boolean locked;
-        public ShipLayer(int[][] overlay) {
+        private boolean locked;
+        private Overlay overlay;
+        public ShipLayer(int[][] temp) {
             locked = false;
-            add(new overlay(overlay));
+            overlay = new Overlay(temp);
+            add(overlay);
         }
         public boolean isLocked() {
             return locked;
@@ -47,9 +45,12 @@ public class BigPanel extends JLayeredPane {
         public void lock() {
             locked = true;
         }
-        public class overlay extends JPanel {
+        public Overlay getOverlay() {
+            return overlay;
+        }
+        public class Overlay extends JPanel {
             int[][] overlay;
-            public overlay(int[][] overlay) {
+            public Overlay(int[][] overlay) {
                 this.overlay = overlay;
                 setBounds(0, 0, 500, 500);
                 setOpaque(false);
@@ -59,11 +60,14 @@ public class BigPanel extends JLayeredPane {
                 Graphics2D g2 = (Graphics2D)g;
 
                 g2.setStroke(new BasicStroke(2));
-                g2.setColor(Color.WHITE);
                 if (overlay != null) {
-                    for (int row = 0; row < 100; row++) {
-                        for (int column = 0; column < 100; column++) {
-                            if (overlay[row][column] == 1) g2.drawOval(row * 50 + 10, column * 50 + 10, 30, 30);
+                    for (int row = 0; row < overlay.length; row++) {
+                        for (int column = 0; column < overlay[0].length; column++) {
+                            if (overlay[row][column] == 1) {
+                                if (Client.grid[row][column] != 0) g2.setColor(Color.RED);
+                                else g2.setColor(Color.WHITE);
+                                g2.drawOval(column * 50 + 10, row * 50 + 10, 30, 30);
+                            }
                         }
                     }
 
@@ -85,7 +89,6 @@ public class BigPanel extends JLayeredPane {
     }
     public class Square extends AbstractButton {
         private Color color;
-        private int row, column;
         private boolean hasX;
         public Square() {
             color = null;
@@ -102,7 +105,7 @@ public class BigPanel extends JLayeredPane {
                     g2.drawLine(14, 14, getWidth() - 15, getHeight() - 15);
                     g2.drawLine(getWidth() - 15, 14, 14, getHeight() - 15);
                 }
-                g2.drawOval(10, 10, getWidth() - 21, getHeight() - 21);
+                g2.drawOval(10, 10, getWidth() - 20, getHeight() - 20);
             }
         }
         public class SquareClicked implements MouseListener {
@@ -112,9 +115,13 @@ public class BigPanel extends JLayeredPane {
             }
             public void mousePressed(MouseEvent e) {  
                 if (getButtonLayer().isVisible() && square.color == null) {
-                    if (getButtonLayer().getSquare() != null) getButtonLayer().getSquare().setColor(null);
+                    if (getButtonLayer().getSquare() != null) {
+                        getButtonLayer().getSquare().setColor(null);
+                        getButtonLayer().getSquare().repaint();
+                    }
                     getButtonLayer().setSquare(square);
                     square.setColor(Color.GREEN);
+                    square.repaint();
                     Client.confirmButton.setEnabled(true);
                 }
             }  
@@ -123,10 +130,6 @@ public class BigPanel extends JLayeredPane {
             public void mouseEntered(MouseEvent e) { }  
             public void mouseExited(MouseEvent e) { }  
         }
-        public void setRow(int row) { this.row = row; }
-        public int getRow() { return row; }
-        public void setColumn(int column) { this.column = column; }
-        public int getColumn() { return column; }
         public void setColor(Color color) { this.color = color; }
         public void setHasX(boolean hasX) { this.hasX = hasX; }
     }

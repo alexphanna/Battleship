@@ -34,6 +34,7 @@ public class Ship extends AbstractButton {
         if (rotation) setSize(50, getLength() * 50);
         else setSize(getLength() * 50, 50);
         rotation = !rotation;
+        
     }
     public int getLength() {
         return length;
@@ -81,7 +82,6 @@ public class Ship extends AbstractButton {
                 else {
                     ship.setLocation(new Point((int)((ship.getX() + 25) / 50) * 50, (int)((ship.getY() + 25) / 50) * 50));
                     Grid.moveShip(Client.grid, ship, (ship.getY() + 25) / 50, (ship.getX() + 25) / 50);
-                    Grid.print(Client.grid);
                 }
             }
         }  
@@ -100,7 +100,6 @@ public class Ship extends AbstractButton {
                     ship.repaint();
                 }
             }
-
         }
         public void mouseClicked(MouseEvent e) { }  
         public void mouseEntered(MouseEvent e) { }  

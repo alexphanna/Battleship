@@ -3,12 +3,12 @@ import java.awt.*;
 import java.awt.event.*;
 public class Client {
     public static int[][] grid = Grid.getRandomShips();
-    public static BigPanel mainPanel = new BigPanel();
     public static UserInterface.Button confirmButton = new UserInterface().new Button("Confirm");
-    public static UserInterface.Chat chat = new UserInterface().new Chat();
     private static JFrame frame = new JFrame("Battleship");
     public static int[][] enemyGrid = Grid.getRandomShips(); 
-    public static int[][] enemyTorpedoGrid = new int[10][10];;
+    public static int[][] enemyTorpedoGrid = new int[10][10];
+    public static BigPanel mainPanel = new BigPanel(enemyTorpedoGrid);
+    public static UserInterface.Chat chat = new UserInterface().new Chat();
     public static void main(String[] args) {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
@@ -53,16 +53,18 @@ public class Client {
     public int[][] getGrid() {
         return grid;
     }
+    public static void SwitchView() {
+        Client.mainPanel.getShipLayer().setVisible(!Client.mainPanel.getShipLayer().isVisible());
+        Client.mainPanel.getButtonLayer().setVisible(!Client.mainPanel.getButtonLayer().isVisible());
+        Client.mainPanel.getShipLayer().getOverlay().repaint();
+    }
     public class SwitchViewClicked implements MouseListener {
         private UserInterface.Button button;
         public SwitchViewClicked(UserInterface.Button button) {
             this.button = button;
         }
         public void mousePressed(MouseEvent e) {  
-            if (button.isEnabled()) {
-                Client.mainPanel.getShipLayer().setVisible(!Client.mainPanel.getShipLayer().isVisible());
-                Client.mainPanel.getButtonLayer().setVisible(!Client.mainPanel.getButtonLayer().isVisible());
-            }
+            if (button.isEnabled()) SwitchView();
         }  
         public void mouseReleased(MouseEvent e) { }  
         public void mouseClicked(MouseEvent e) { }  
@@ -78,6 +80,7 @@ public class Client {
         }
         public void mousePressed(MouseEvent e) {  
             if (button.isEnabled()) {
+                mainPanel.getShipLayer().setComponentZOrder(mainPanel.getShipLayer().getOverlay(), 0);
                 if (mainPanel.getShipLayer().isVisible()) {
                     Client.mainPanel.getShipLayer().lock();
                     switchViewButton.setEnabled(true);
@@ -88,8 +91,8 @@ public class Client {
                     button.setEnabled(false);
                 }
                 else {
-                    int row = mainPanel.getButtonLayer().getSquare().getRow();
-                    int column = mainPanel.getButtonLayer().getSquare().getColumn();
+                    int row = mainPanel.getButtonLayer().getSquare().getY() / 50;
+                    int column = mainPanel.getButtonLayer().getSquare().getX() / 50;
                     if (enemyGrid[row][column] != 0) {
                         mainPanel.getButtonLayer().getSquare().setColor(Color.RED);
                         boolean hasX = true;
@@ -109,9 +112,10 @@ public class Client {
                                 for (int c = 0; c < enemyGrid[0].length; c++)
                                     if (enemyGrid[r][c] == enemyGrid[row][column]) mainPanel.getButtonLayer().getSquareAt(r, c).setHasX(true);
                         }
-                        else chat.getOutput().print("You have hit a ship at {" + (char)(row + 65) + ", " + (column + 1) + "}");    
+                        else chat.getOutput().print("You have hit a ship at " + (char)(row + 65) + (column + 1));    
                     }
                     else mainPanel.getButtonLayer().getSquare().setColor(Color.WHITE);
+                    mainPanel.getButtonLayer().repaint();
                     mainPanel.getButtonLayer().setSquare(null);
                     Grid.print(enemyGrid);
                     int randomRow, randomColumn;
@@ -120,11 +124,7 @@ public class Client {
                         randomColumn = (int)(Math.random() * 10);
                     } while (enemyTorpedoGrid[randomRow][randomColumn] == 1);
                     enemyTorpedoGrid[randomRow][randomColumn] = 1;
-                    Grid.print(enemyTorpedoGrid);
-                    for (int[] is :  Client.mainPanel.getShipLayer().repaint();) {
-                        
-                    }
-                    if (grid[randomRow][randomColumn] != 0) chat.getOutput().print("The Opponent has hit your ship at {" + (char)(randomRow + 65) + ", " + (randomColumn + 1) + "}");
+                    if (grid[randomRow][randomColumn] != 0) chat.getOutput().print("The Opponent has hit your ship at " + (char)(randomRow + 65) + (randomColumn + 1));
                 }
             }
         }  

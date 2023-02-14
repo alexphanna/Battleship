@@ -115,12 +115,19 @@ public class UserInterface {
                 setOpaque(false);
                 setForeground(Color.WHITE);
                 setLayout(null);   
+                addActionListener(new InputEntered());
             }
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
     
                 g.setColor(Color.RED);
                 g.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 5, 5);
+            }
+            public class InputEntered implements ActionListener {
+                public void actionPerformed(ActionEvent e) {
+                    ((Chat)getParent()).getOutput().print(getText());
+                    setText("");
+                }
             }
         }
     }
