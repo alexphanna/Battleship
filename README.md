@@ -10,5 +10,5 @@ Made for AP Computer Science A
 - [x] A grid class that extends a JPanel w/ a GridLayout that displays the 2D arrays
   - Method to add a ship object to a 2D array at a position (e.g.: x.add(Ship ship, Position position)
 - [x] Fully functional interface w/ draggable ships and accurate displaying of the 2D arrays
-- [ ] Singleplayer mode with computer to play against
+- [ ] Singleplayer mode with computer to play against computer
 - [ ] Multiplayer mode that can connect via LAN and use a simple universal language to communicate w/ other Battleship clients
