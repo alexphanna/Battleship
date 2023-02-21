@@ -1,5 +1,6 @@
 # Battleship
 Made for AP Computer Science A
+<img src="screenshot-1.png" width="300" /> 
 ## Features
 - [x] Abstract ship object class w/ instance variables for size
   - Inherited children for ship types (Carrier, Battleship, Cruiser, Submarine, Destroyer)
