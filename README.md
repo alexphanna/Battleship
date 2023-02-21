@@ -1,7 +1,8 @@
 # Battleship
 Made for AP Computer Science A
 
-<img src="screenshot-1.png" width="500" /> <img src="screenshot-1.png" width="500" /> 
+<img src="screenshot-1.png" width="500" /> <img src="screenshot-2.png" width="500" /> 
+<img src="screenshot-2.png" width="1000" /> 
 
 ## Features
 - [x] Abstract ship object class w/ instance variables for size
