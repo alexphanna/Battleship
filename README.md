@@ -11,7 +11,7 @@ Made for AP Computer Science A
 
 <img src="screenshot-3.png" width="500" /> 
 
-**Current status of the player's ship class*
+**Current status of the player's ship class**
 
 ## Features
 - [x] Abstract ship object class w/ instance variables for size
