@@ -2,13 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 public class Client {
-    public static int[][] grid = Grid.getRandomShips();
-    public static UserInterface.Button confirmButton = new UserInterface().new Button("Confirm");
     private static JFrame frame = new JFrame("Battleship");
-    public static int[][] enemyGrid = Grid.getRandomShips(); 
-    public static int[][] enemyTorpedoGrid = new int[10][10];
+    public static int[][] grid = Grid.getRandomShips();
+    private static int[][] enemyGrid = Grid.getRandomShips(); 
+    private static int[][] enemyTorpedoGrid = new int[10][10];
     public static BigPanel mainPanel = new BigPanel(enemyTorpedoGrid);
-    public static UserInterface.Chat chat = new UserInterface().new Chat();
+    public static UserInterface.Button confirmButton = new UserInterface().new Button("Confirm");
+    private static UserInterface.Chat chat = new UserInterface().new Chat();
     public static void main(String[] args) {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
@@ -49,9 +49,6 @@ public class Client {
 
         frame.pack();
         frame.setVisible(true);
-    }
-    public int[][] getGrid() {
-        return grid;
     }
     public static void SwitchView() {
         Client.mainPanel.getShipLayer().setVisible(!Client.mainPanel.getShipLayer().isVisible());

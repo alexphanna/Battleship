@@ -39,15 +39,9 @@ public class BigPanel extends JLayeredPane {
             overlay = new Overlay(temp);
             add(overlay);
         }
-        public boolean isLocked() {
-            return locked;
-        }
-        public void lock() {
-            locked = true;
-        }
-        public Overlay getOverlay() {
-            return overlay;
-        }
+        public void lock() { locked = true; }
+        public boolean isLocked() { return locked; }
+        public Overlay getOverlay() { return overlay; }
         public class Overlay extends JPanel {
             int[][] overlay;
             public Overlay(int[][] overlay) {
@@ -77,15 +71,9 @@ public class BigPanel extends JLayeredPane {
     }
     public class ButtonLayer extends JPanel {
         Square square;
-        public void setSquare(Square square) {
-            this.square = square;
-        }
-        public Square getSquare() {
-            return square;
-        }
-        public Square getSquareAt(int row, int column) {
-            return (Square)getComponent(row * 10 + column);
-        }
+        public void setSquare(Square square) { this.square = square; }
+        public Square getSquare() { return square; }
+        public Square getSquareAt(int row, int column) { return (Square)getComponent(row * 10 + column); }
     }
     public class Square extends AbstractButton {
         private Color color;
@@ -133,14 +121,16 @@ public class BigPanel extends JLayeredPane {
         public void setColor(Color color) { this.color = color; }
         public void setHasX(boolean hasX) { this.hasX = hasX; }
     }
-    public ShipLayer getShipLayer() {
-        return shipLayer;
-    }
-    public ButtonLayer getButtonLayer() {
-        return buttonLayer;
-    }
+    public ShipLayer getShipLayer() { return shipLayer; }
+    public ButtonLayer getButtonLayer() { return buttonLayer; }
     
-    public void addShip(Ship ship, int row, int column) {
+    public void addShip(int shipType, int row, int column, boolean rotation) {
+        AbstractShip ship = new Ship().new Submarine();
+        if (shipType == 2) ship = new Ship().new Destroyer();
+        else if (shipType == 3) ship = new Ship().new Cruiser();
+        else if (shipType == 4) ship = new Ship().new Battleship();
+        else if (shipType == 5) ship = new Ship().new Carrier();
+        if (!rotation) ship.Rotate();
         ship.setLocation(column * 50, row * 50);
         getShipLayer().add(ship);
     }
@@ -150,8 +140,7 @@ public class BigPanel extends JLayeredPane {
             for (int column = 0; column < grid[0].length - 1; column++) {
                 if (grid[row][column] != 0 && grid[row][column] == grid[row][column + 1]) counter++; 
                 if ((grid[row][column] == 1 && counter == 3) || (grid[row][column] != 1 && counter == grid[row][column])) {
-                    if (grid[row][column] == 1) addShip(new Submarine(), row, column - counter + 2);
-                    else addShip(new Ship(grid[row][column]), row, column - counter + 2);
+                    addShip(grid[row][column], row, column - counter + 2, true);
                     counter = 1;                        
                 }
             }
@@ -161,10 +150,7 @@ public class BigPanel extends JLayeredPane {
             for (int row = 0; row < grid.length - 1; row++) {
                 if (grid[row][column] != 0 && grid[row][column] == grid[row + 1][column]) counter++; 
                 if ((grid[row][column] == 1 && counter == 3) || (grid[row][column] != 1 && counter == grid[row][column])) {
-                    Ship temp = new Ship(grid[row][column]);
-                    if (grid[row][column] == 1) temp = new Ship(3);
-                    temp.Rotate();
-                    addShip(temp, row - counter + 2, column);
+                    addShip(grid[row][column], row - counter + 2, column, false);
                     counter = 1;
                 }
             }

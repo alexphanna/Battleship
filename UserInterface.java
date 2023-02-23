@@ -13,17 +13,13 @@ public class UserInterface {
             else setColor(Color.GRAY);
             addMouseListener(new ButtonSelected());
         }
-        public boolean isEnabled() {
-            return enabled;
-        }
+        public boolean isEnabled() { return enabled; }
         public void setEnabled(boolean enabled) {
             this.enabled = enabled;
             if (enabled) setColor(Color.RED);
             else setColor(Color.GRAY);
         }
-        public Color getColor() {
-            return color;
-        }
+        public Color getColor() { return color; }
         public void setColor(Color color) {
             this.color = color;
             repaint();

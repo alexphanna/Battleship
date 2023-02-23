@@ -15,21 +15,14 @@ public class Grid extends JPanel{
             g.drawString((char)(i + 64) + "", 7, (i - 1) * 50 + 43);
         }
     }
-    public static boolean shipExists(int[][] grid, Ship ship, int row, int column) {
-        for (int i = 0; i < ship.getLength(); i++) {
-            if (ship.getRotation() && grid[row][column + i] != 0) return true;
-            else if (!ship.getRotation() && grid[row + i][column] != 0) return true; 
-        }
-        return false; 
-    }
     public static int[][] getRandomShips() {
         int[][] grid = new int[10][10];
         for (int i = 1; i <= 5; i++) {
-            Ship ship = new Submarine();
-            if (i == 2) ship = new Destroyer();
-            else if (i == 3) ship = new Cruiser();
-            else if (i == 4) ship = new Battleship();
-            else if (i == 5) ship = new Carrier();
+            AbstractShip ship = new Ship().new Submarine();
+            if (i == 2) ship = new Ship().new Destroyer();
+            else if (i == 3) ship = new Ship().new Cruiser();
+            else if (i == 4) ship = new Ship().new Battleship();
+            else if (i == 5) ship = new Ship().new Carrier();
             double number = Math.random();
             if (number < 0.5) ship.Rotate();
             int row, column;
@@ -41,7 +34,7 @@ public class Grid extends JPanel{
                 row = (int)(Math.random() * (10 - ship.getLength()));
                 column = (int)(Math.random() * 10);
             }
-            if (!shipExists(grid, ship, row, column)) moveShip(grid, ship, row, column);
+            if (!ship.exists(grid, row, column)) ship.move(grid, row, column);
             else {
                 i--;
                 continue;
@@ -49,20 +42,6 @@ public class Grid extends JPanel{
         }
         print(grid);
         return grid;
-    }
-    public static void moveShip(int[][] grid, Ship ship, int row, int column) {
-        for (int i = 0; i < ship.getLength(); i++) {
-            if (ship instanceof Submarine && ship.getRotation()) grid[row][column + i] = 1;
-            else if (ship instanceof Submarine && !ship.getRotation()) grid[row + i][column] = 1;
-            else if (ship.getRotation()) grid[row][column + i] = ship.getLength();
-            else grid[row + i][column] = ship.getLength();
-        }
-    }
-    public static void removeShip(int[][] grid, Ship ship, int row, int column) {
-        for (int i = 0; i < ship.getLength(); i++) {
-            if (ship.getRotation()) grid[row][column + i] = 0;
-            else grid[row + i][column] = 0;
-        }
     }
     public static void print(int[][] grid) {
         System.out.println();
