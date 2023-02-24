@@ -9,6 +9,7 @@ public class Client {
     public static BigPanel mainPanel = new BigPanel(enemyTorpedoGrid);
     public static UserInterface.Button confirmButton = new UserInterface().new Button("Confirm");
     private static UserInterface.Chat chat = new UserInterface().new Chat();
+    public static int turn = 0;
     public static void main(String[] args) {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
@@ -122,6 +123,22 @@ public class Client {
                     } while (enemyTorpedoGrid[randomRow][randomColumn] == 1);
                     enemyTorpedoGrid[randomRow][randomColumn] = 1;
                     if (grid[randomRow][randomColumn] != 0) chat.getOutput().print("The Opponent has hit your ship at " + (char)(randomRow + 65) + (randomColumn + 1));
+                    boolean playerWon = true;
+                    boolean computerWon = true;
+                    for (int r = 0; r < 10; r++) {
+                        for (int c = 0; c < 10; c++) {
+                            if (enemyGrid[r][c] > 0) playerWon = false;
+                            if (grid[r][c] > 0 && enemyTorpedoGrid[r][c] == 0) computerWon = false;
+                        }
+                    }
+                    if (playerWon)  JOptionPane.showMessageDialog(frame, "Player Won!");
+                    if (computerWon) JOptionPane.showMessageDialog(frame, "Computer Won!");
+                    if (playerWon || computerWon)
+                    {
+                        frame.getContentPane().remove(0);
+                        frame.add(new MainMenu());
+                        frame.pack();
+                    }
                 }
             }
         }  

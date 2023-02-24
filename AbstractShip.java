@@ -77,7 +77,7 @@ public abstract class AbstractShip extends AbstractButton {
                     getParent().setComponentZOrder(ship, 0);
                     timer.start();
                 }
-                else if (ship.isSelected()) {
+                else if (ship.isSelected() && Client.mainPanel.getShipLayer().getMousePosition() != null) {
                     Rotate();
                 }
             }

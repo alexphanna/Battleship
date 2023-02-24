@@ -6,7 +6,7 @@ public class UserInterface {
         private Color color;
         private boolean enabled;
         public Button(String text) {
-            enabled = false;
+            setEnabled(false);
             setText(text);
             setSize(100, 25);
             if (enabled) setColor(Color.RED);
